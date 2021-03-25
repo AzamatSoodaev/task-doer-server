@@ -14,11 +14,19 @@ exports.signup = (req, res) => {
     password: bcrypt.hashSync(req.body.password, 8),
   })
     .then((user) => {
-      // let token = jwt.sign({ id: user.id }, config.secret, {
-      //   expiresIn: 86400, // expires in 24 hours
-      // });
-      // res.status(201).send({ auth: true, token: token });
-      res.status(201).send({ message: "User was registered successfully!" });
+      var token = jwt.sign({ id: user.id }, config.secret, {
+        expiresIn: 86400, // 24 hours
+      });
+
+      res.status(201).send({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        accessToken: token,
+        message: "User was registered successfully!",
+      });
+
+      // res.status(201).send({ message: "User was registered successfully!" });
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
