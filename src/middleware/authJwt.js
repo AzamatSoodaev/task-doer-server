@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
+const db = require("../models");
+const User = db.user;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
@@ -16,11 +18,26 @@ verifyToken = (req, res, next) => {
         message: "Unauthorized!",
       });
     }
+
     req.userId = decoded.id;
     next();
   });
 };
 
+isMe = (req, res, next) => {
+  User.findByPk(req.userId).then((user) => {
+    if (user.username === req.params.username) {
+      next();
+      return;
+    }
+
+    return res.status(401).send({
+      message: "Unauthorized!",
+    });
+  });
+};
+
 module.exports = {
   verifyToken,
+  isMe,
 };
