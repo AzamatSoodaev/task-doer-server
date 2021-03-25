@@ -1,8 +1,8 @@
 "use strict";
 
 const { Sequelize, DataTypes } = require("sequelize");
-const env = process.env.NODE_ENV || "development";
-const config = require("../config/db.config")[env];
+// const env = process.env.NODE_ENV || "development";
+// const config = require("../config/db.config")[env];
 
 // const sequelize = new Sequelize(
 //   config.database,
@@ -11,7 +11,7 @@ const config = require("../config/db.config")[env];
 //   config
 // );
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, config);
+const sequelize = new Sequelize(process.env.DATABASE_URL);
 
 const db = {};
 
