@@ -38,7 +38,7 @@ exports.create = (req, res) => {
     todo: req.body.todo,
     completed: req.body.completed,
     isImportant: req.body.isImportant,
-    userId: req.params.userId,
+    userId: req.body.userId,
   })
     .then((todo) => {
       res.status(201).send(todo);
