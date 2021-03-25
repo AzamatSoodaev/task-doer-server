@@ -20,9 +20,10 @@ exports.findAll = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
-  const userId = req.params.userId;
+  const username = req.params.username;
 
-  User.findByPk(userId, {
+  User.findOne({
+    where: { username: username },
     attributes: { exclude: ["password"] },
     include: { model: Todo, as: "todos" },
     order: [[{ model: Todo, as: "todos" }, "id", "ASC"]],
