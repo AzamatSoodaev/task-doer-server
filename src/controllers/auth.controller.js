@@ -15,12 +15,12 @@ exports.signup = async (req, res) => {
 	try {
 
 		const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
+		if (!errors.isEmpty()) {
+			return res.status(400).json({
 				data: {},
-				errors: errors.array() 
+				errors: errors.array()
 			});
-    }
+		}
 
 		// Step 1. Check if user is not exists
 		let userDAO = req.body;
@@ -33,10 +33,10 @@ exports.signup = async (req, res) => {
 
 		if (user) {
 			return res.status(400).json({
-					data: {},
-					errors: [
-						{ msg: "Email is already in use!" }
-					]
+				data: {},
+				errors: [
+					{ msg: "Email is already in use!" }
+				]
 			});
 		}
 
@@ -69,7 +69,7 @@ exports.signup = async (req, res) => {
 		res.status(500).json({
 			data: {},
 			errors: [
-				{	msg: err.message }
+				{ msg: err.message }
 			]
 		});
 	}

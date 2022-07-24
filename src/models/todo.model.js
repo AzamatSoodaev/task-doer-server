@@ -2,28 +2,28 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class Todo extends Model {}
+	class Todo extends Model { }
 
-  Todo.init(
-    {
+	Todo.init(
+		{
 			id: {
 				type: DataTypes.INTEGER,
 				autoIncrement: true,
 				primaryKey: true,
 			},
-      todo: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      completed: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
+			todo: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+			completed: {
+				type: DataTypes.BOOLEAN,
+				allowNull: false,
+				defaultValue: false,
+			},
 			isDeleted: {
 				type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
+				allowNull: false,
+				defaultValue: false,
 			},
 			dueDates: {
 				type: DataTypes.DATE,
@@ -37,14 +37,14 @@ module.exports = (sequelize, DataTypes) => {
 			listId: {
 				type: DataTypes.INTEGER,
 			},
-    },
-    {
-      sequelize,
-      modelName: "todo",
+		},
+		{
+			sequelize,
+			modelName: "todo",
 			tableName: "todos",
 			underscored: true
-    }
-  );
+		}
+	);
 
-  return Todo;
+	return Todo;
 };

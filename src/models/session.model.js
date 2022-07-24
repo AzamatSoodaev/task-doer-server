@@ -2,7 +2,7 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-	class Session extends Model {}
+	class Session extends Model { }
 
 	Session.init(
 		{
