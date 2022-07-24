@@ -76,41 +76,77 @@ exports.signup = async (req, res) => {
 };
 
 
-exports.signin = (req, res) => {
-	User.findOne({
-		where: {
-			username: req.body.username,
-		},
-	})
-		.then((user) => {
-			if (!user) {
-				return res.status(404).send({ message: "User Not found." });
-			}
+exports.signin = async (req, res) => {
 
-			var passwordIsValid = bcrypt.compareSync(
-				req.body.password,
-				user.password
-			);
-
-			if (!passwordIsValid) {
-				return res.status(401).send({
-					accessToken: null,
-					message: "Invalid Password!",
-				});
-			}
-
-			var token = jwt.sign({ id: user.id }, config.secret, {
-				expiresIn: 86400, // 24 hours
+	try {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({
+				data: {},
+				errors: errors.array()
 			});
+		}
 
-			res.status(200).send({
-				id: user.id,
-				username: user.username,
-				email: user.email,
-				accessToken: token,
-			});
-		})
-		.catch((err) => {
-			res.status(500).send({ message: err.message });
+		let user = await User.findOne({
+			where: {
+				email: req.body.email,
+			},
 		});
+
+		if (!user) {
+			return res.status(404).send({
+				data: {},
+				errors: [
+					{
+						msg: "User Not found."
+					}
+				]
+			});
+		}
+
+		const isValidPassword = bcrypt.compareSync(
+			req.body.password,
+			user.password,
+		);
+
+		if (!isValidPassword) {
+			return res.status(401).send({
+				data: {
+					accessToken: null,
+				},
+				errors: [
+					{
+						msg: "Invalid Password!",
+					}
+				],
+
+			});
+		}
+
+		const accessToken = jwt.sign({ id: user.id }, process.env.SECRET, {
+			expiresIn: 86400, // 24 hours
+		});
+
+		await Session.create({
+			accessToken: accessToken,
+			userId: user.id
+		});
+
+		res.status(200).json({
+			data: {
+				accessToken: accessToken,
+			},
+			errors: [],
+		});
+
+	} catch (err) {
+		console.log(err);
+
+		res.status(500).json({
+			data: {},
+			errors: [
+				{ msg: err.message }
+			]
+		});
+	}
 };

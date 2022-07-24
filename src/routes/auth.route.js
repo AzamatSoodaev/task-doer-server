@@ -19,5 +19,10 @@ module.exports = (app) => {
 		body('password').isLength({ min: 5, max: 32 }),
 		authController.signup
 	);
-	// app.post("/api/auth/signin", authController.signin);
+	app.post(
+		"/api/auth/signin",
+		body('email').isEmail(),
+		body('password').isLength({ min: 5, max: 32 }),
+		authController.signin
+	);
 };
