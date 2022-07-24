@@ -1,5 +1,5 @@
 const sequelizeModule = require("./src/models/index");
-
+const expressModule = require("./src/api");
 
 process.on("uncaughtException", uncaughtHandler);
 process.on("SIGINT", cleanup);
@@ -10,6 +10,7 @@ process.on("SIGUSR2", cleanup);
 (async () => {
 	try {
 		await sequelizeModule.init();
+		await expressModule.init();
 	} catch (err) {
 		console.log(err);
 	}

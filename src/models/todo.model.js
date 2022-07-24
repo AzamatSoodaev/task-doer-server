@@ -6,6 +6,11 @@ module.exports = (sequelize, DataTypes) => {
 
   Todo.init(
     {
+			id: {
+				type: DataTypes.INTEGER,
+				autoIncrement: true,
+				primaryKey: true,
+			},
       todo: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -15,15 +20,29 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
-      isImportant: {
-        type: DataTypes.BOOLEAN,
+			isDeleted: {
+				type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
-      },
+			},
+			dueDates: {
+				type: DataTypes.DATE,
+			},
+			notes: {
+				type: DataTypes.STRING,
+			},
+			userId: {
+				type: DataTypes.INTEGER,
+			},
+			listId: {
+				type: DataTypes.INTEGER,
+			},
     },
     {
       sequelize,
       modelName: "todo",
+			tableName: "todos",
+			underscored: true
     }
   );
 
