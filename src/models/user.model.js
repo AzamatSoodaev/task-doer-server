@@ -2,15 +2,19 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {}
+  class User extends Model {
+		getFullname() {
+			return [this.firstName, this.lastName].join(' ');
+		}
+	}
 
   User.init(
     {
-      username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
+			id: {
+				type: DataTypes.INTEGER,
+				autoIncrement: true,
+				primaryKey: true,
+			},
       email: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -23,10 +27,18 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+			firstName: {
+        type: DataTypes.STRING,
+      },
+			lastName: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,
-      modelName: "user",
+      modelName: "User",
+			tableName: "users",
+			underscored: true
     }
   );
 
