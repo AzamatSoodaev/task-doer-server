@@ -1,29 +1,17 @@
 "use strict";
 
 const { Sequelize, DataTypes } = require("sequelize");
-const env = process.env.NODE_ENV || "development";
-const config = require("../config/db.config")[env];
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, config);
+exports.db = null;
 
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Connection has been established successfully.");
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+exports.init = async () => {
+	console.log("Initializing Sequelize module");
 
-const db = {};
-
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
-
-db.todo = require("../models/todo.model")(sequelize, DataTypes);
-db.user = require("../models/user.model")(sequelize, DataTypes);
-
-db.user.hasMany(db.todo, { as: "todos" });
-db.todo.belongsTo(db.user, { as: "user", foreignKey: "userId" });
-
-module.exports = db;
+	try {
+		const sequelize = new Sequelize(process.env.PG_DATABASE_URL);
+		await sequelize.authenticate();
+		console.log("Connection to postgres db has been established successfully.");
+	} catch (err) {
+		console.error('Unable to connect to the database:', err);
+	}
+};
